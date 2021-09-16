@@ -6,4 +6,9 @@ public class Hello : MonoBehaviour
     {
         Debug.Log("Hello?!");
     }
+
+    void Test()
+    {
+
+    }    
 }
