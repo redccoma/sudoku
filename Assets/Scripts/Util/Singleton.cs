@@ -1,7 +1,7 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// Awake ±¸ÇöÀÌ ÇÊ¿äÇÒ °æ¿ì override·Î ±¸ÇöÇÒ°Í
+/// Awake êµ¬í˜„ì´ í•„ìš”í•  ê²½ìš° overrideë¡œ êµ¬í˜„í• ê²ƒ
 /// </summary>
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {

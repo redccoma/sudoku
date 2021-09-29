@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 
 using UnityEngine;
@@ -7,20 +7,20 @@ using UnityEngine.SceneManagement;
 public class SceneControl : Singleton<SceneControl>
 {
     /// <summary>
-    /// ¾ÀÀÇ ÀÌ¸§ ±×´ë·Î »ç¿ë.
+    /// ì”¬ì˜ ì´ë¦„ ê·¸ëŒ€ë¡œ ì‚¬ìš©.
     /// </summary>
     public enum SceneType
     {
         /// <summary>
-        /// ¾Û ÁøÀÔ ¾À
+        /// ì•± ì§„ì… ì”¬
         /// </summary>
         Entry,
         /// <summary>
-        /// ¾ÀÀüÈ¯½Ã Àá½Ã ÀÌµ¿ÇÒ ¾À
+        /// ì”¬ì „í™˜ì‹œ ì ì‹œ ì´ë™í•  ì”¬
         /// </summary>
         Load,
         /// <summary>
-        /// ¸ŞÀÎ ¾À
+        /// ë©”ì¸ ì”¬
         /// </summary>
         Main
     }
@@ -28,14 +28,14 @@ public class SceneControl : Singleton<SceneControl>
     private SceneType nextScne = default(SceneType);
     private Action<float> onLoadPercentCallback;
     private Action onComplateCallback;
-    private Coroutine asyncCoroutine;   // ¾ê´Â ½ÇÁ¦ ¾È¾²ÀÏ°Í °°Áö¸¸.. °ÔÀÓ ±â´ÉÁß ·ÎµåÇÏ´Ù Ãë¼ÒÇÏ´Â ±â´ÉÀÌ ÇÊ¿äÇÒ °æ¿ì¸¦ »óÁ¤ÇØ¼­ ¹Ì¸® ¸¸µé¾î¸¸ µÎÀÚ.
+    private Coroutine asyncCoroutine;   // ì–˜ëŠ” ì‹¤ì œ ì•ˆì“°ì¼ê²ƒ ê°™ì§€ë§Œ.. ê²Œì„ ê¸°ëŠ¥ì¤‘ ë¡œë“œí•˜ë‹¤ ì·¨ì†Œí•˜ëŠ” ê¸°ëŠ¥ì´ í•„ìš”í•  ê²½ìš°ë¥¼ ìƒì •í•´ì„œ ë¯¸ë¦¬ ë§Œë“¤ì–´ë§Œ ë‘ì.
 
     /// <summary>
-    /// ¾ÀÀÇ ÀÌµ¿½Ã È£Ãâ
+    /// ì”¬ì˜ ì´ë™ì‹œ í˜¸ì¶œ
     /// </summary>
-    /// <param name="_type">ÀÌµ¿ÇÒ ¾ÀÀÇ Å¸ÀÔ</param>
-    /// <param name="loadPercentCallback">¾ÀÀÇ ·Îµå°ª Äİ¹é(0 ~ 1.0)</param>
-    /// <param name="complateCallback">¾ÀÀÇ ·Îµå ¿Ï·áÈÄ Äİ¹éÀÌ ÇÊ¿äÇÒ °æ¿ì</param>
+    /// <param name="_type">ì´ë™í•  ì”¬ì˜ íƒ€ì…</param>
+    /// <param name="loadPercentCallback">ì”¬ì˜ ë¡œë“œê°’ ì½œë°±(0 ~ 1.0)</param>
+    /// <param name="complateCallback">ì”¬ì˜ ë¡œë“œ ì™„ë£Œí›„ ì½œë°±ì´ í•„ìš”í•  ê²½ìš°</param>
     public void ChangeScene(SceneType _type, Action<float> loadPercentCallback = null, Action complateCallback = null)
     {
         this.nextScne = _type;
@@ -46,12 +46,12 @@ public class SceneControl : Singleton<SceneControl>
 
     private IEnumerator LoadAsyncScene()
     {
-        // ±âº» Load ¾ÀÀ¸·Î ÀÌµ¿ÇÑ´Ù. (¿ä°Ç ¾ó¸¶ ¾È°É¸®Áö¸¸ Load¾À¿¡ ¹¹°¡ µé¾î¿ÃÁö ¸ğ¸£¹Ç·Î ºñµ¿±â ·Îµå·Î Ã³¸®ÇÑ´Ù.)
+        // ê¸°ë³¸ Load ì”¬ìœ¼ë¡œ ì´ë™í•œë‹¤. (ìš”ê±´ ì–¼ë§ˆ ì•ˆê±¸ë¦¬ì§€ë§Œ Loadì”¬ì— ë­ê°€ ë“¤ì–´ì˜¬ì§€ ëª¨ë¥´ë¯€ë¡œ ë¹„ë™ê¸° ë¡œë“œë¡œ ì²˜ë¦¬í•œë‹¤.)
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SceneType.Load.ToString());
         while (!asyncLoad.isDone)
             yield return null;
 
-        // Load¾ÀÀ¸·Î ÀÌµ¿ ¿Ï·áÈÄ ½ÇÁ¦ ÀÌµ¿ÇÒ ¾ÀÀ» ·ÎµåÇÑ´Ù.
+        // Loadì”¬ìœ¼ë¡œ ì´ë™ ì™„ë£Œí›„ ì‹¤ì œ ì´ë™í•  ì”¬ì„ ë¡œë“œí•œë‹¤.
         asyncLoad = SceneManager.LoadSceneAsync(nextScne.ToString());
         while (!asyncLoad.isDone)
         {
