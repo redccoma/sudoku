@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneControl : Singleton<SceneControl>
+public class SceneManager : Singleton<SceneManager>
 {
     /// <summary>
     /// 씬의 이름 그대로 사용.
@@ -47,12 +47,12 @@ public class SceneControl : Singleton<SceneControl>
     private IEnumerator LoadAsyncScene()
     {
         // 기본 Load 씬으로 이동한다. (요건 얼마 안걸리지만 Load씬에 뭐가 들어올지 모르므로 비동기 로드로 처리한다.)
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SceneType.Load.ToString());
+        AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(SceneType.Load.ToString());
         while (!asyncLoad.isDone)
             yield return null;
 
         // Load씬으로 이동 완료후 실제 이동할 씬을 로드한다.
-        asyncLoad = SceneManager.LoadSceneAsync(nextScne.ToString());
+        asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(nextScne.ToString());
         while (!asyncLoad.isDone)
         {
             this.onLoadPercentCallback?.Invoke(asyncLoad.progress);

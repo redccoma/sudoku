@@ -18,6 +18,10 @@ public class MatrixControl : MonoBehaviour
     public GameObject prefabNumberItem;
     public Transform createParent_portrait; // 가로용, 세로용이 필요하다.
 
+    /// <summary>
+    /// 기본판넬에 NumberItem 프리팹 생성
+    /// </summary>
+    /// <param name="_type"></param>
     public void CreateMatrix(MatrixType _type)
     {
         for (int i = 0; i <= 80; i++)
