@@ -4,8 +4,7 @@
 # Unity 버젼
 * 2021.1.21f1 *
 
-# 스도쿠 문제 만들기 및 수정
-* 16:9 비율에 최적화 되어 있음
+# 스도쿠 문제 만들기 및 수정 (16:9 비율에 최적화 되어 있음)
 ![image](https://user-images.githubusercontent.com/15643337/135591281-d8e083dd-af69-4498-9bbd-32068c3c9ae1.png)
 -
 	CreateDataScene으로 이동 후 유니티 에디터에서 실행.
