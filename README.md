@@ -55,3 +55,9 @@
 ![image](https://user-images.githubusercontent.com/15643337/135591043-a7737126-ad62-4e69-b364-d1ec2d7eed25.png)
 -
 	이런식으로 모든 란을 채운 후 저장.
+	
+	
+	
+![image](https://user-images.githubusercontent.com/15643337/135593167-7218a3da-5df6-402f-8334-98b6bde5ac8a.png)
+-
+	모든 작업을 완료한 후 반드시 전체 데이터 저장을 해야 json에 반영됨.
