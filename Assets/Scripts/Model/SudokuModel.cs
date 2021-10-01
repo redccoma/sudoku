@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using UnityEngine;
 using Newtonsoft;
 using Newtonsoft.Json;
 
@@ -10,16 +11,14 @@ public class SudokuModel
     [Serializable]
     public class Question
     {
+        private const short INVALID_VALUE = -1;
+
         public enum JsonType
         {
             /// <summary>
             /// 문제
             /// </summary>
             Question,
-            /// <summary>
-            /// 사용자 데이터
-            /// </summary>
-            UserData,
             /// <summary>
             /// 정답
             /// </summary>
@@ -34,7 +33,7 @@ public class SudokuModel
         /// <summary>
         /// 문제는 0인덱스, 문제+사용자데이터는 1인덱스
         /// </summary>
-        public int[][,] q;
+        public int[,] q;
         /// <summary>
         /// 
         /// </summary>
@@ -43,51 +42,45 @@ public class SudokuModel
         /// <summary>
         /// 현재 올바른 데이터로 전부 입력되었는지?
         /// </summary>
-        public bool IsCorrectTotalData
+        public bool IsCorrectTotalData()
         {
-            get
+            bool result = true;
+
+            for (int i = 0; i < length; i++)
             {
-                bool result = true;
-
-                for (int i = 0; i < length; i++)
+                for (int j = 0; j < length; j++)
                 {
-                    for (int j = 0; j < length; j++)
+                    if (q[i, j] == Question.INVALID_VALUE || a[i, j] == Question.INVALID_VALUE)
                     {
-                        if (q[1][i, j] == -1 || a[i, j] == -1)
-                        {
-                            result = false;
-                            break;
-                        }
-                    }
-
-                    if (!result)
+                        result = false;
                         break;
+                    }
                 }
 
-                return result;
+                if (!result)
+                    break;
             }
+
+            return result;
         }
 
         /// <summary>
         /// 생성자. 데이터 생성시 길이 필수
         /// </summary>
         /// <param name="length"></param>
-        public Question(int length)
+        public Question(int _length)
         {
-            q = new int[2][,];  // 0인덱스: 문제, 1인덱스:문제+사용자입력데이터
-            q[0] = new int[length, length]; // 최초 문제 데이터
-            q[1] = new int[length, length]; // 최초 문제 + 사용자 입력 데이터
+            length = _length;
 
+            q = new int[length, length];
             a = new int[length, length];
 
             for (int i = 0; i < length; i++)
             {
                 for (int j = 0; j < length; j++)
                 {
-                    // 데이터가 입력되지 않은 기본값은 -1. 
-                    q[0][i, j] = -1;
-                    q[1][i, j] = 0; // 사용자 입력 데이터는 기본값 0으로 처리한다.
-                    a[i, j] = -1;
+                    q[i, j] = Question.INVALID_VALUE;
+                    a[i, j] = Question.INVALID_VALUE;
                 }
             }
         }
@@ -103,16 +96,14 @@ public class SudokuModel
         public bool SetData(JsonType _type, short x, short y, int data)
         {
             // x나 y의 값이 1 ~ length - 1 사이의 값이어야 한다.
-            if (x < 1 || length < x)
+            if (x < 0 || length - 1 < x)
                 return false;
 
-            if (y < 1 || length < y)
+            if (y < 0 || length - 1 < y)
                 return false;
 
             if (_type == JsonType.Question)
-                q[0][x, y] = data;
-            else if (_type == JsonType.UserData)
-                q[1][x, y] = data;
+                q[x, y] = data;            
             else if (_type == JsonType.Answer)
                 a[x, y] = data;
 
@@ -130,12 +121,23 @@ public class SudokuModel
         {
             return a[x, y] == userData;
         }
+
+        /// <summary>
+        /// 특정 위치 값이 문제용 숫자인가?
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public bool IsQuestionItem(short x, short y)
+        {
+            return q[x, y] > Question.INVALID_VALUE;    // q배열 데이터값이 초기값보다 크다면 문제임.
+        }
     }
 
     /// <summary>
     /// 키: 문제번호, 값:문제데이터
     /// </summary>
-    public Dictionary<int, Question> data;
+    public Dictionary<int, Question> data = new Dictionary<int, Question>();
 
     /// <summary>
     /// 생성된 문제번호가 있는지
@@ -155,5 +157,18 @@ public class SudokuModel
         }
         else
             return null;
+    }
+
+    public void AddData(int key, Question _data)
+    {
+        if(data.ContainsKey(key))
+        {
+            Debug.LogError("키 있음.");
+        }
+        else
+        {
+            data.Add(key, _data);
+            Debug.Log(string.Format("<color=white>{0}</color>", "데이터 추가 완료"));
+        }
     }
 }

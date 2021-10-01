@@ -10,6 +10,20 @@ using UnityEngine.UI;
 /// </summary>
 public class CreateDataControl : MonoBehaviour
 {
+    public enum STATE
+    {
+        INVALID,
+        /// <summary>
+        /// 기존 문제 수정상태
+        /// </summary>
+        EDIT,
+        /// <summary>
+        /// 새로운 문제 만들기 상태
+        /// </summary>
+        NEW,
+    }
+    private bool isLoadedJson = false;  // 문제 수정 및 생성전 무조건 json을 로드하게끔한다.
+
     private string SAVE_PATH = string.Empty;
     private string LOAD_PATH = "JsonData/data";
 
@@ -22,6 +36,8 @@ public class CreateDataControl : MonoBehaviour
     private SudokuModel model;  // 전체 스도쿠 데이터
     private InputItem[,] items; // 현재 패널에 생성된 인풋아이템의 프리팹 모음배열
     private int selectedNumber; // 현재 패널의 문제번호
+
+    private STATE currentState = STATE.INVALID; // 현재 상태
 
     private void Awake()
     {
@@ -63,7 +79,7 @@ public class CreateDataControl : MonoBehaviour
         {
             for (int j = 0; j < 9; j++)
             {
-                items[i, j].SetData(string.Empty);
+                items[i, j].SetInit();
             }
         }
     }
@@ -87,11 +103,16 @@ public class CreateDataControl : MonoBehaviour
             }
             else
             {
-                for (int i = 0; i < 9; i++)
+                for (short i = 0; i < 9; i++)
                 {
-                    for (int j = 0; j < 9; j++)
+                    for (short j = 0; j < 9; j++)
                     {
-                        items[i, j].SetData(model.GetQuestion(questionNumber).q[0][i, j]);
+                        SudokuModel.Question _q = model.GetQuestion(questionNumber);
+
+                        int curNumber = _q.a[i, j];
+                        bool isQuestion = _q.IsQuestionItem(i, j);
+
+                        items[i, j].SetData(curNumber, isQuestion);
                     }
                 }
 
@@ -101,8 +122,6 @@ public class CreateDataControl : MonoBehaviour
 
         return false;
     }
-
-    
 
     /// <summary>
     /// 파일이 없는 경우 반환값은 null
@@ -121,8 +140,10 @@ public class CreateDataControl : MonoBehaviour
         else
         {
             Debug.Log(string.Format("<color=red>{0}</color>", "데이터 로드 실패. JSON 파일 없음"));
-            model = null;            
+            model = new SudokuModel();
         }
+
+        isLoadedJson = true;
     }
 
     /// <summary>
@@ -131,6 +152,12 @@ public class CreateDataControl : MonoBehaviour
     /// <param name="model"></param>
     public void Save()
     {
+        if (!isLoadedJson)
+        {
+            Debug.Log(string.Format("<color=red>{0}</color>", "전체 데이터 로드부터 시작해주세요."));
+            return;
+        }
+
         if (model != null)
         {
             string _json = JsonConvert.SerializeObject(model);
@@ -142,7 +169,8 @@ public class CreateDataControl : MonoBehaviour
             //        writer.Write(_json);
             //    }
             //}
-            // UnityEditor.AssetDatabase.Refresh();
+
+            Debug.Log(string.Format("<color=red>{0}</color>", _json));
 
             try
             {
@@ -152,6 +180,8 @@ public class CreateDataControl : MonoBehaviour
             {
                 Debug.Log(string.Format("<color=red>{0}</color>", e.ToString()));
             }
+
+            UnityEditor.AssetDatabase.Refresh();
         }
         else
         {
@@ -164,6 +194,12 @@ public class CreateDataControl : MonoBehaviour
     /// </summary>
     public void OnClick_EditLoad()
     {
+        if (!isLoadedJson)
+        {
+            Debug.Log(string.Format("<color=red>{0}</color>", "전체 데이터 로드부터 시작해주세요."));
+            return;
+        }
+
         int number = 0;
         bool isParse = int.TryParse(editQuestionNumberField.text, out number);
 
@@ -173,12 +209,14 @@ public class CreateDataControl : MonoBehaviour
             {
                 // 셋팅 성공 했으므로 현재 문제번호 저장.
                 selectedNumber = number;
+                currentState = STATE.EDIT;
             }
             else
             {
                 // 셋팅 실패 했으므로 초기화
                 selectedNumber = 0;
                 SetInputFieldsInitialize();
+                currentState = STATE.INVALID;
             }
         }
     }
@@ -188,19 +226,35 @@ public class CreateDataControl : MonoBehaviour
     /// </summary>
     public void OnClick_EditSave()
     {
-        if(selectedNumber > 0)
+        if (!isLoadedJson)
         {
-            for (int i = 0; i < 9; i++)
+            Debug.Log(string.Format("<color=red>{0}</color>", "전체 데이터 로드부터 시작해주세요."));
+            return;
+        }
+
+        if (currentState == STATE.EDIT && selectedNumber > 0)
+        {
+            for (short i = 0; i < 9; i++)
             {
-                for (int j = 0; j < 9; j++)
+                for (short j = 0; j < 9; j++)
                 {
-                    model.data[selectedNumber].q[0][i, j] = items[i, j].GetData();
+                    int curNumber = items[i, j].GetData();
+                    bool isQuestion = items[i, j].IsQuestion;
+
+                    if (isQuestion)
+                        model.data[selectedNumber].SetData(SudokuModel.Question.JsonType.Question, i, j, curNumber);
+                    else
+                        model.data[selectedNumber].SetData(SudokuModel.Question.JsonType.Answer, i, j, curNumber);
                 }
             }
+
+            // Json 반영
+            Save();
         }
         else
         {
             Debug.Log(string.Format("<color=red>{0}</color>", "문제상태가 아니므로 저장불가."));
+            currentState = STATE.INVALID;
         }
     }
 
@@ -209,13 +263,35 @@ public class CreateDataControl : MonoBehaviour
     /// </summary>
     public void OnClick_NewQuestionCreate()
     {
+        if (!isLoadedJson)
+        {
+            Debug.Log(string.Format("<color=red>{0}</color>", "전체 데이터 로드부터 시작해주세요."));
+            return;
+        }
+
+        if (string.IsNullOrEmpty(newQuestionNumberField.text))
+        {
+            Debug.Log(string.Format("<color=red>{0}</color>", "문제 번호를 입력하세요."));
+            return;
+        }
+
         int number = 0;
         bool isParse = int.TryParse(newQuestionNumberField.text, out number);
 
         if (isParse)
         {
-            
+            selectedNumber = number;
+            currentState = STATE.NEW;
+            Debug.Log(string.Format("<color=white>{0}</color>", "새로운 문제 만들기 준비 완료."));
         }
+        else
+        {
+            Debug.Log(string.Format("<color=red>{0}</color>", "문제 번호를 정확히 입력해주세요."));
+            selectedNumber = 0;
+            currentState = STATE.INVALID;
+        }
+
+        SetInputFieldsInitialize();
     }
 
     /// <summary>
@@ -223,6 +299,38 @@ public class CreateDataControl : MonoBehaviour
     /// </summary>
     public void OnClick_NewQuestionSave()
     {
+        if (!isLoadedJson)
+        {
+            Debug.Log(string.Format("<color=red>{0}</color>", "전체 데이터 로드부터 시작해주세요."));
+            return;
+        }
 
+        if (currentState == STATE.NEW && selectedNumber > 0)
+        {
+            SudokuModel.Question _q = new SudokuModel.Question(9);
+
+            for (short i = 0; i < 9; i++)
+            {
+                for (short j = 0; j < 9; j++)
+                {
+                    int curNum = items[i,j].GetData();
+                    bool isQuestion = items[i, j].IsQuestion;
+
+                    if (isQuestion)
+                        _q.SetData(SudokuModel.Question.JsonType.Question, i, j, curNum);
+
+                    _q.SetData(SudokuModel.Question.JsonType.Answer, i, j, curNum);
+                }
+            }
+
+            model.AddData(selectedNumber, _q);
+        }
+        else
+        {
+            Debug.Log(string.Format("<color=red>{0}</color>", "문제상태가 아니므로 저장불가."));
+
+            selectedNumber = 0;
+            currentState = STATE.INVALID;
+        }
     }
 }
