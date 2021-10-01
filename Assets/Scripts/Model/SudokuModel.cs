@@ -132,6 +132,16 @@ public class SudokuModel
         {
             return q[x, y] > Question.INVALID_VALUE;    // q배열 데이터값이 초기값보다 크다면 문제임.
         }
+
+        /// <summary>
+        /// 문제 데이터 수정과정에서 문제였다가 정답으로 바뀌면 q데이터 수정이 필요하여 만든다.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void ResetQuestionData(short x, short y)
+        {
+            q[x, y] = Question.INVALID_VALUE;
+        }
     }
 
     /// <summary>

@@ -162,18 +162,12 @@ public class CreateDataControl : MonoBehaviour
         {
             string _json = JsonConvert.SerializeObject(model);
 
-            //using (FileStream fs = new FileStream(SAVE_PATH, FileMode.Create))
-            //{
-            //    using (StreamWriter writer = new StreamWriter(fs))
-            //    {
-            //        writer.Write(_json);
-            //    }
-            //}
-
-            Debug.Log(string.Format("<color=red>{0}</color>", _json));
-
             try
             {
+                // 기존 파일은 지운다.
+                if (File.Exists(SAVE_PATH))
+                    File.Delete(SAVE_PATH);
+
                 File.WriteAllText(SAVE_PATH, _json);
             }
             catch (System.SystemException e)
@@ -182,6 +176,8 @@ public class CreateDataControl : MonoBehaviour
             }
 
             UnityEditor.AssetDatabase.Refresh();
+
+            Debug.Log(string.Format("<color=white>{0}</color>", "내 마음속에 저★장★ 완료!"));
         }
         else
         {
@@ -244,7 +240,9 @@ public class CreateDataControl : MonoBehaviour
                     if (isQuestion)
                         model.data[selectedNumber].SetData(SudokuModel.Question.JsonType.Question, i, j, curNumber);
                     else
-                        model.data[selectedNumber].SetData(SudokuModel.Question.JsonType.Answer, i, j, curNumber);
+                        model.data[selectedNumber].ResetQuestionData(i, j);
+
+                    model.data[selectedNumber].SetData(SudokuModel.Question.JsonType.Answer, i, j, curNumber);
                 }
             }
 
