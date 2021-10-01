@@ -7,6 +7,7 @@ public class InputItem : MonoBehaviour
 {
     public InputField field;
     public Toggle toggle;
+    public Text numberText;
 
     public string Name
     {
@@ -39,10 +40,23 @@ public class InputItem : MonoBehaviour
     {
         field.text = number.ToString();
         toggle.isOn = isQuestion;
+
+        if (toggle.isOn)
+            numberText.color = Color.red;
+        else
+            numberText.color = Color.black;
     }
 
     public void SetData(string str)
     {
         field.text = str;
+    }
+
+    public void OnValueChangedToggle()
+    {
+        if(toggle.isOn)
+            numberText.color = Color.red;
+        else
+            numberText.color = Color.black;
     }
 }

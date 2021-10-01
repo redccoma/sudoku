@@ -143,6 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   field: {fileID: 1761314006338791948}
   toggle: {fileID: 988693985503383342}
+  numberText: {fileID: 1761314007221159322}
 --- !u!114 &1761314006338791947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -451,7 +452,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -478,7 +479,19 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1581829492549918381}
+        m_TargetAssemblyTypeName: InputItem, Assembly-CSharp
+        m_MethodName: OnValueChangedToggle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!1 &8857311980609758488
 GameObject:
