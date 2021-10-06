@@ -7,14 +7,6 @@ using UnityEngine;
 /// </summary>
 public class MatrixControl : MonoBehaviour
 {
-    public enum MatrixType
-    {
-        /// <summary>
-        /// 9 * 9 스도쿠 타입
-        /// </summary>
-        NINE_NINE,
-    }
-
     public GameObject prefabNumberItem;
     public Transform createParent_portrait; // 가로용, 세로용이 필요하다.
 
@@ -22,7 +14,7 @@ public class MatrixControl : MonoBehaviour
     /// 기본판넬에 NumberItem 프리팹 생성
     /// </summary>
     /// <param name="_type"></param>
-    public void CreateMatrix(MatrixType _type)
+    public void CreateMatrix(MATRIX_TYPE _type)
     {
         for (int i = 0; i <= 80; i++)
         {

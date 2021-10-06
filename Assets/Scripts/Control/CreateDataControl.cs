@@ -9,19 +9,7 @@ using UnityEngine.UI;
 /// 스크립트 관리 규약과는 상관없이 왠만한 기능은 이쪽에서 구현한다.
 /// </summary>
 public class CreateDataControl : MonoBehaviour
-{
-    public enum STATE
-    {
-        INVALID,
-        /// <summary>
-        /// 기존 문제 수정상태
-        /// </summary>
-        EDIT,
-        /// <summary>
-        /// 새로운 문제 만들기 상태
-        /// </summary>
-        NEW,
-    }
+{   
     private bool isLoadedJson = false;  // 문제 수정 및 생성전 무조건 json을 로드하게끔한다.
 
     private string SAVE_PATH = string.Empty;
@@ -37,7 +25,7 @@ public class CreateDataControl : MonoBehaviour
     private InputItem[,] items; // 현재 패널에 생성된 인풋아이템의 프리팹 모음배열
     private int selectedNumber; // 현재 패널의 문제번호
 
-    private STATE currentState = STATE.INVALID; // 현재 상태
+    private CRAETE_STATE currentState = CRAETE_STATE.INVALID; // 현재 상태
 
     private void Awake()
     {
@@ -107,7 +95,7 @@ public class CreateDataControl : MonoBehaviour
                 {
                     for (short j = 0; j < 9; j++)
                     {
-                        SudokuModel.Question _q = model.GetQuestion(questionNumber);
+                        Question _q = model.GetQuestion(questionNumber);
 
                         int curNumber = _q.a[i, j];
                         bool isQuestion = _q.IsQuestionItem(i, j);
@@ -205,14 +193,14 @@ public class CreateDataControl : MonoBehaviour
             {
                 // 셋팅 성공 했으므로 현재 문제번호 저장.
                 selectedNumber = number;
-                currentState = STATE.EDIT;
+                currentState = CRAETE_STATE.EDIT;
             }
             else
             {
                 // 셋팅 실패 했으므로 초기화
                 selectedNumber = 0;
                 SetInputFieldsInitialize();
-                currentState = STATE.INVALID;
+                currentState = CRAETE_STATE.INVALID;
             }
         }
     }
@@ -228,7 +216,7 @@ public class CreateDataControl : MonoBehaviour
             return;
         }
 
-        if (currentState == STATE.EDIT && selectedNumber > 0)
+        if (currentState == CRAETE_STATE.EDIT && selectedNumber > 0)
         {
             for (short i = 0; i < 9; i++)
             {
@@ -238,11 +226,11 @@ public class CreateDataControl : MonoBehaviour
                     bool isQuestion = items[i, j].IsQuestion;
 
                     if (isQuestion)
-                        model.data[selectedNumber].SetData(SudokuModel.Question.JsonType.Question, i, j, curNumber);
+                        model.data[selectedNumber].SetData(JSON_TYPE.Question, i, j, curNumber);
                     else
                         model.data[selectedNumber].ResetQuestionData(i, j);
 
-                    model.data[selectedNumber].SetData(SudokuModel.Question.JsonType.Answer, i, j, curNumber);
+                    model.data[selectedNumber].SetData(JSON_TYPE.Answer, i, j, curNumber);
                 }
             }
 
@@ -252,7 +240,7 @@ public class CreateDataControl : MonoBehaviour
         else
         {
             Debug.Log(string.Format("<color=red>{0}</color>", "문제상태가 아니므로 저장불가."));
-            currentState = STATE.INVALID;
+            currentState = CRAETE_STATE.INVALID;
         }
     }
 
@@ -279,14 +267,14 @@ public class CreateDataControl : MonoBehaviour
         if (isParse)
         {
             selectedNumber = number;
-            currentState = STATE.NEW;
+            currentState = CRAETE_STATE.NEW;
             Debug.Log(string.Format("<color=white>{0}</color>", "새로운 문제 만들기 준비 완료."));
         }
         else
         {
             Debug.Log(string.Format("<color=red>{0}</color>", "문제 번호를 정확히 입력해주세요."));
             selectedNumber = 0;
-            currentState = STATE.INVALID;
+            currentState = CRAETE_STATE.INVALID;
         }
 
         SetInputFieldsInitialize();
@@ -303,9 +291,9 @@ public class CreateDataControl : MonoBehaviour
             return;
         }
 
-        if (currentState == STATE.NEW && selectedNumber > 0)
+        if (currentState == CRAETE_STATE.NEW && selectedNumber > 0)
         {
-            SudokuModel.Question _q = new SudokuModel.Question(9);
+            Question _q = new Question(9);
 
             for (short i = 0; i < 9; i++)
             {
@@ -315,9 +303,9 @@ public class CreateDataControl : MonoBehaviour
                     bool isQuestion = items[i, j].IsQuestion;
 
                     if (isQuestion)
-                        _q.SetData(SudokuModel.Question.JsonType.Question, i, j, curNum);
+                        _q.SetData(JSON_TYPE.Question, i, j, curNum);
 
-                    _q.SetData(SudokuModel.Question.JsonType.Answer, i, j, curNum);
+                    _q.SetData(JSON_TYPE.Answer, i, j, curNum);
                 }
             }
 
@@ -328,7 +316,7 @@ public class CreateDataControl : MonoBehaviour
             Debug.Log(string.Format("<color=red>{0}</color>", "문제상태가 아니므로 저장불가."));
 
             selectedNumber = 0;
-            currentState = STATE.INVALID;
+            currentState = CRAETE_STATE.INVALID;
         }
     }
 }

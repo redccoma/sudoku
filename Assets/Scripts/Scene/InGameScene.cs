@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 
-public class LoadScene : MonoBehaviour
+public class InGameScene : MonoBehaviour
 {
+    public MatrixControl matricControl;
+
     private void Awake()
     {
         // 글로벌 이벤트 등록
@@ -10,7 +12,7 @@ public class LoadScene : MonoBehaviour
 
     private void Start()
     {
-
+        // matricControl.CreateMatrix(MATRIX_TYPE.NINE_NINE);
     }
 
     // 화면 회전 글로벌 이벤트 리스너

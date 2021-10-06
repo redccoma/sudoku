@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 
-public class LoadScene : MonoBehaviour
+public class LobbyScene : MonoBehaviour
 {
+    public GameObject portraitCanvas;
+    public GameObject landscapeCanvas;
+
     private void Awake()
     {
         // 글로벌 이벤트 등록
