@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class LobbyScene : MonoBehaviour
 {
     public GameObject portraitCanvas;
     public GameObject landscapeCanvas;
+
+    public Text _text;
 
     private void Awake()
     {
@@ -19,7 +22,7 @@ public class LobbyScene : MonoBehaviour
     // 화면 회전 글로벌 이벤트 리스너
     private void OnScreenRotate(SCREEN_ORIENTATION_TYPE type)
     {
-        Debug.Log(type.ToString());
+        
     }
 
     private void OnDestroy()

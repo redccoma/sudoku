@@ -140,6 +140,7 @@ public class CreateDataControl : MonoBehaviour
     /// <param name="model"></param>
     public void Save()
     {
+#if UNITY_EDITOR
         if (!isLoadedJson)
         {
             Debug.Log(string.Format("<color=red>{0}</color>", "전체 데이터 로드부터 시작해주세요."));
@@ -171,6 +172,7 @@ public class CreateDataControl : MonoBehaviour
         {
             Debug.Log(string.Format("<color=white>{0}</color>", "로드된 데이터가 없습니다"));
         }
+#endif
     }
 
     /// <summary>

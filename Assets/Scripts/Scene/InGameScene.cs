@@ -18,7 +18,7 @@ public class InGameScene : MonoBehaviour
     // 화면 회전 글로벌 이벤트 리스너
     private void OnScreenRotate(SCREEN_ORIENTATION_TYPE type)
     {
-        Debug.Log(type.ToString());
+        
     }
 
     private void OnDestroy()
