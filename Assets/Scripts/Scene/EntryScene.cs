@@ -11,7 +11,18 @@ public class EntryScene : MonoBehaviour
 
     public void Start()
     {
-        // 만약 Entry에서 처리해야할 부분이 있다면 처리.
-        SceneManager.Instance.ChangeScene(SCENE_TYPE.Lobby);
+        DataManager.Instance.Init(OnDataLoaded);
+    }
+
+    public void OnDataLoaded(bool isSuccess)
+    {
+        if(isSuccess)
+        {
+            SceneManager.Instance.ChangeScene(SCENE_TYPE.Lobby);
+        }
+        else
+        {
+
+        }
     }
 }

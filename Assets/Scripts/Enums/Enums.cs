@@ -23,11 +23,11 @@ public enum SCREEN_ORIENTATION_TYPE
 public enum JSON_TYPE
 {
     /// <summary>
-    /// 문제
+    /// 문제 (만들때 체크된 붉은색 폰트숫자로 유저가 입력해야 할 값)
     /// </summary>
     Question,
     /// <summary>
-    /// 정답
+    /// 정답 (입력된 모든 숫자)
     /// </summary>
     Answer,
 }

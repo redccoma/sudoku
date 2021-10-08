@@ -12,7 +12,7 @@ public class InGameScene : MonoBehaviour
 
     private void Start()
     {
-        // matricControl.CreateMatrix(MATRIX_TYPE.NINE_NINE);
+        Debug.Log(DataManager.Instance.GetSelectedNumber);
     }
 
     // 화면 회전 글로벌 이벤트 리스너

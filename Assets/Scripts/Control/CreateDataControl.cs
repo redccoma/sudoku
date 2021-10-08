@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
+/// Editor에서만 실행될 스크립트
 /// Window OS 환경만 고려하여 작업되었음. OSX 고려안됨
 /// 이 스크립트는 배포용이 아닌 json을 만들기 위한 목적만 가지고 있으므로
 /// 스크립트 관리 규약과는 상관없이 왠만한 기능은 이쪽에서 구현한다.

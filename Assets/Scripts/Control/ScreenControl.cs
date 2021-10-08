@@ -8,7 +8,12 @@ public class ScreenControl : MonoBehaviour
     /// <summary>
     /// 현재 화면의 상태.
     /// </summary>
-    private SCREEN_ORIENTATION_TYPE currentOrientation;
+    private static SCREEN_ORIENTATION_TYPE currentOrientation;
+
+    public static SCREEN_ORIENTATION_TYPE GetScreenOrientation
+    {
+        get { return currentOrientation; }
+    }
 
     private void Awake()
     {
