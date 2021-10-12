@@ -13,6 +13,19 @@ public class UserModel
     public Dictionary<int, UserInputData> userData = new Dictionary<int, UserInputData>();
 
     /// <summary>
+    /// 특정 문제에 대한 유저 입력 데이터 얻기
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    public UserInputData GetData(int key)
+    {
+        if (userData != null && userData.ContainsKey(key))
+            return userData[key];
+        else
+            return null;
+    }
+
+    /// <summary>
     /// 생성시엔 스도쿠 기본 모델 데이터를 받아 셋팅한다.
     /// </summary>
     /// <param name="sm"></param>

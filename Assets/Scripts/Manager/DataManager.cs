@@ -12,7 +12,7 @@ public class DataManager : Singleton<DataManager>
     /// </summary>
     private static SudokuModel SUDOKU_DATA;
     /// <summary>
-    /// 문제번호 + 문제 + 유저입력 데이터
+    /// 문제 + 유저입력 데이터
     /// </summary>
     private static UserModel USER_DATA;
     /// <summary>
@@ -23,8 +23,6 @@ public class DataManager : Singleton<DataManager>
     /// 클라이언트 내부에 저장된 문제 및 정답 JSON PATH
     /// </summary>
     private string CLIENT_DATA_PATH;
-
-    private Action<bool> onCallback;
 
     /// <summary>
     /// 현재 선택된 스테이지
@@ -52,8 +50,6 @@ public class DataManager : Singleton<DataManager>
     /// <param name="complate">초기화 성공/실패여부 콜백</param>
     public void Init(Action<bool> complate)
     {
-        onCallback = complate;
-
         if (!LoadClientData())
         {
             complate?.Invoke(false);
@@ -93,6 +89,25 @@ public class DataManager : Singleton<DataManager>
     {
         selectedQuestionNumber = qustionNumber;
         SceneManager.Instance.ChangeScene(SCENE_TYPE.InGame);
+    }
+
+    /// <summary>
+    /// 특정 스테이지의 문제 데이터 얻기
+    /// </summary>
+    /// <param name="stageNumber"></param>
+    public Question GetStageData(int stageNumber)
+    {
+        return SUDOKU_DATA.GetQuestion(stageNumber);
+    }
+
+    /// <summary>
+    /// 특정 스테이지의 유저 입력 데이터 얻기
+    /// </summary>
+    /// <param name="stageNumber"></param>
+    /// <returns></returns>
+    public UserInputData GetUserData(int stageNumber)
+    {
+        return USER_DATA.GetData(stageNumber);
     }
 
     #region PRIVATE 
