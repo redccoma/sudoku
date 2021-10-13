@@ -737,6 +737,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabNumberItem: {fileID: 7543094181580910961, guid: 822dcbbba7d778c40aa4301a98c603ae, type: 3}
   createParent_portrait: {fileID: 536017647}
+  baseNumber_portrait: {fileID: 1989025876}
 --- !u!1 &898516989
 GameObject:
   m_ObjectHideFlags: 0
@@ -1160,6 +1161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabNumberItem: {fileID: 7543094181580910961, guid: 822dcbbba7d778c40aa4301a98c603ae, type: 3}
   createParent_portrait: {fileID: 898516990}
+  baseNumber_portrait: {fileID: 0}
 --- !u!1 &1829348653
 GameObject:
   m_ObjectHideFlags: 0

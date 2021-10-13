@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+
 using UnityEngine;
 
 public class InGame_BaseNumber : MonoBehaviour
@@ -7,12 +7,7 @@ public class InGame_BaseNumber : MonoBehaviour
     public GameObject prefab;
     public Transform prefabParent;
 
-    public void Awake()
-    {
-        CreateItem();
-    }
-
-    public void CreateItem()
+    public void CreateItem(Action<int> action)
     {
         for (int i = 0; i < 9; i++)
         {
@@ -20,12 +15,7 @@ public class InGame_BaseNumber : MonoBehaviour
             BaseNumberItem _item = _instance.GetComponent<BaseNumberItem>();
 
             _item.SetData(i + 1);
-            _item.onClickEvent += OnClickEvent;
+            _item.onClickEvent += action;
         }
-    }
-
-    public void OnClickEvent(int number)
-    {
-        Debug.Log(number);
     }
 }
