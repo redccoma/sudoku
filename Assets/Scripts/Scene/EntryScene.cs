@@ -7,6 +7,7 @@ public class EntryScene : MonoBehaviour
     public void Awake()
     {
         DontDestroyOnLoad(dontDestroyObject);
+
     }
 
     public void Start()
@@ -26,4 +27,5 @@ public class EntryScene : MonoBehaviour
             // 데이터 초기화 실패시 처리 
         }
     }
+
 }

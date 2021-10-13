@@ -7,6 +7,10 @@ public class InGame_BaseNumber : MonoBehaviour
     public GameObject prefab;
     public Transform prefabParent;
 
+    /// <summary>
+    /// 하단 아이템 생성
+    /// </summary>
+    /// <param name="action">하단 숫자 클릭시 수신받을 이벤트</param>
     public void CreateItem(Action<int> action)
     {
         for (int i = 0; i < 9; i++)

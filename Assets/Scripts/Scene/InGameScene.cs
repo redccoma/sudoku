@@ -31,6 +31,16 @@ public class InGameScene : MonoBehaviour
         }
     }
 
+    public void OnClick_Lobby()
+    {
+        SceneManager.Instance.ChangeScene(SCENE_TYPE.Lobby);
+    }
+
+    public void OnClick_Regame()
+    {
+        SceneManager.Instance.ChangeScene(SCENE_TYPE.InGame);
+    }
+
     private void OnDestroy()
     {
         // 글로벌 이벤트 해제

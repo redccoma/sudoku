@@ -82,3 +82,33 @@ public enum MATRIX_TYPE
     /// </summary>
     NINE_NINE,
 }
+
+/// <summary>
+/// 메인 패널 아이템의 상태값
+/// int 값이 0에 가까울수록 우선순위가 높다.
+/// 우선순위 변경시 아래의 값을 변경한다 하더라도 반영되지 않으므로 주의.
+/// (이런경우 MatrixControl.SelectMainItem의 로직을 수정해야함)
+/// </summary>
+public enum MAIN_CELL_STATE
+{
+    /// <summary>
+    /// 현재 선택된 상태
+    /// 187, 224, 253
+    /// </summary>
+    SELECTED,
+    /// <summary>
+    /// 선택된 셀과 동일한 숫자인 경우
+    /// 199, 207, 220
+    /// </summary>
+    SAME_NUMBER,
+    /// <summary>
+    /// 선택된 셀과 같은 열 또는 행에 위치
+    /// 또는 같은 사각에 위치했을때
+    /// 228, 231, 238
+    /// </summary>
+    ALIGNMENT,
+    /// <summary>
+    /// 셀의 기본 상태
+    /// </summary>
+    INVALID,
+}

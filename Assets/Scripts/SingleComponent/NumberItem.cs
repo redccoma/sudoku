@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class NumberItem : MonoBehaviour
 {
     public Text mText;
+    public Image selectedColor;
 
     public GameObject leftLine;
     public GameObject rightLine;
@@ -17,10 +18,11 @@ public class NumberItem : MonoBehaviour
 
     public Action<System.Numerics.Vector2> onClickEvent;   // 클릭시 처리할 이벤트
 
-    private int myNumber;
-    private System.Numerics.Vector2 myPosition;
-
+    private int myNumber;   // 현재 숫자
+    private int myArea;     // 에어리어 (사각 영역 넘버링)
+    private System.Numerics.Vector2 myPosition; // 내 좌표
     private bool _isQuestion = false;
+
     /// <summary>
     /// 유저가 입력 가능한 필드인가.
     /// </summary>
@@ -33,6 +35,29 @@ public class NumberItem : MonoBehaviour
     }
 
     /// <summary>
+    /// 지정된 Area 번호 얻기
+    /// </summary>
+    public int GetAreaNumber
+    {
+        get
+        {
+            return myArea;
+        }
+    }
+
+    /// <summary>
+    /// 현재 아이템의 숫자 얻기
+    /// </summary>
+
+    public int GetNumber
+    {
+        get
+        {
+            return myNumber;
+        }
+    }
+
+    /// <summary>
     /// 최초 설정시
     /// </summary>
     /// <param name="number">1~n, 혹은 0(유저가 입력해야 하는 값)</param>
@@ -40,7 +65,7 @@ public class NumberItem : MonoBehaviour
     /// <param name="isRight">외곽라인(오른쪽)</param>
     /// <param name="isTop">외곽라인(위)</param>
     /// <param name="isBottom">외곽라인(아래)</param>
-    public void SetInit(int number, System.Numerics.Vector2 position, bool isLeft, bool isRight, bool isTop, bool isBottom)
+    public void SetInit(int number, int areaNumber, System.Numerics.Vector2 position, bool isLeft, bool isRight, bool isTop, bool isBottom)
     {
         _isQuestion = number <= 0;
 
@@ -50,6 +75,7 @@ public class NumberItem : MonoBehaviour
             mText.text = number.ToString();
 
         myNumber = number;
+        myArea = areaNumber;
         myPosition = position;
 
         leftLine.SetActive(isLeft);
@@ -59,12 +85,44 @@ public class NumberItem : MonoBehaviour
     }
 
     /// <summary>
-    /// 유저 입력시 호출.
+    /// 셀 숫자 수정
     /// </summary>
-    /// <param name="number"></param>
-    public void SetNumber(int number)
+    /// <param name="number">반영할 숫자 (0 또는 음수인 경우 값 초기화)</param>    
+    public void SetData(int number)
     {
+        if (number > 0)
+        {
+            myNumber = number;
+            mText.text = number.ToString();
+        }
+        else
+        {
+            myNumber = 0;
+            mText.text = string.Empty;
+        }
+    }
 
+    /// <summary>
+    /// 셀 상태 수정
+    /// </summary>
+    /// <param name="_state">셀의 컬러 변경시</param>
+    public void SetState(MAIN_CELL_STATE _state)
+    {
+        switch (_state)
+        {
+            case MAIN_CELL_STATE.SELECTED:
+                selectedColor.color = new Color(187 / 255f, 224 / 255f, 253 / 255f, 1f);
+                break;
+            case MAIN_CELL_STATE.SAME_NUMBER:
+                selectedColor.color = new Color(199 / 255f, 207 / 255f, 220 / 255f, 1f);
+                break;
+            case MAIN_CELL_STATE.ALIGNMENT:
+                selectedColor.color = new Color(228 / 255f, 231 / 255f, 238 / 255f, 1f);
+                break;
+            case MAIN_CELL_STATE.INVALID:
+                selectedColor.color = Color.white;
+                break;
+        }
     }
 
     public void OnClick()
