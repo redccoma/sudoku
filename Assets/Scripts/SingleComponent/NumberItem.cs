@@ -21,16 +21,16 @@ public class NumberItem : MonoBehaviour
     private int myNumber;   // 현재 숫자
     private int myArea;     // 에어리어 (사각 영역 넘버링)
     private System.Numerics.Vector2 myPosition; // 내 좌표
-    private bool _isQuestion = false;
+    private bool isEmptyCell = false;
 
     /// <summary>
     /// 유저가 입력 가능한 필드인가.
     /// </summary>
-    public bool IsQuestion
+    public bool IsEmptyCell
     {
         get
         {
-            return _isQuestion;
+            return isEmptyCell;
         }
     }
 
@@ -67,7 +67,7 @@ public class NumberItem : MonoBehaviour
     /// <param name="isBottom">외곽라인(아래)</param>
     public void SetInit(int number, int areaNumber, System.Numerics.Vector2 position, bool isLeft, bool isRight, bool isTop, bool isBottom)
     {
-        _isQuestion = number <= 0;
+        isEmptyCell = number <= 0;
 
         if (number <= 0)
             mText.text = string.Empty;
@@ -89,8 +89,12 @@ public class NumberItem : MonoBehaviour
     /// </summary>
     /// <param name="number">반영할 숫자 (0 또는 음수인 경우 값 초기화)</param>
     /// <param name="isMatched">정답과 맞는가?</param>
-    public void SetData(int number, bool isMatched)
+    /// <returns>입력이 올바르게 되었는가? (false인 경우 입력 불가셀)</returns>
+    public bool SetData(int number, bool isMatched = false)
     {
+        if (!IsEmptyCell)
+            return false;
+        
         if (number > 0)
         {
             myNumber = number;
@@ -100,12 +104,15 @@ public class NumberItem : MonoBehaviour
         {
             myNumber = 0;
             mText.text = string.Empty;
+            mText.color = Color.black;
         }
 
         if (isMatched)
-            mText.color = Color.black;
+            mText.color = Color.blue;
         else
             mText.color = Color.red;
+
+        return true;
     }
 
     /// <summary>

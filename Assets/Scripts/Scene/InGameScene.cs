@@ -41,6 +41,11 @@ public class InGameScene : MonoBehaviour
         SceneManager.Instance.ChangeScene(SCENE_TYPE.InGame);
     }
 
+    public void OnClick_Erase()
+    {
+        matricControl.OnClick_Erase();
+    }
+
     private void OnDestroy()
     {
         // 글로벌 이벤트 해제

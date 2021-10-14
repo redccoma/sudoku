@@ -662,7 +662,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Undo
+  m_Text: Erase
 --- !u!222 &573544025
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -684,7 +684,7 @@ GameObject:
   - component: {fileID: 662273820}
   - component: {fileID: 662273819}
   m_Layer: 5
-  m_Name: Undo
+  m_Name: Erase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -753,7 +753,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 662273820}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 852137898}
+        m_TargetAssemblyTypeName: InGameScene, Assembly-CSharp
+        m_MethodName: OnClick_Erase
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &662273820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1643,7 +1655,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Undo
+  m_Text: Erase
 --- !u!222 &1313023791
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1953,7 +1965,7 @@ GameObject:
   - component: {fileID: 1664454610}
   - component: {fileID: 1664454609}
   m_Layer: 5
-  m_Name: Undo
+  m_Name: Erase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2022,7 +2034,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1664454610}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 852137898}
+        m_TargetAssemblyTypeName: InGameScene, Assembly-CSharp
+        m_MethodName: OnClick_Erase
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1664454610
 MonoBehaviour:
   m_ObjectHideFlags: 0

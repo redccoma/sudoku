@@ -168,4 +168,21 @@ public class MatrixControl : MonoBehaviour
         selectedItem.SetData(value, currentQuestion.CheckAnswer(_x, _y, value));
         selectedItem2.SetData(value, currentQuestion.CheckAnswer(_x, _y, value));
     }
+
+    /// <summary>
+    /// 현재 선택된 셀의 정보를 초기화한다.
+    /// </summary>
+    public void OnClick_Erase()
+    {
+        // 현재 선택된 좌표 얻기
+        short _x = (short)selectedPosition.X;
+        short _y = (short)selectedPosition.Y;
+
+        // 선택된 셀의 아이템 객체 얻기
+        NumberItem selectedItem = itemList_portrait[_x, _y];
+        NumberItem selectedItem2 = itemList_landscape[_x, _y];
+
+        selectedItem.SetData(0);
+        selectedItem2.SetData(0);
+    }
 }
