@@ -12,12 +12,14 @@ public class MatrixControl : MonoBehaviour
 {
     public GameObject prefabNumberItem;     // 메인 패널에서 사용될 아이템 원형 프리팹.
     
-    public Transform createParent_portrait; // 가로용, 세로용이 필요하다.
-    public GridLayoutGroup grid_portrait;
-    public InGame_BaseNumber baseNumber_portrait;   // 가로용 하단 숫자 관리 스크립트
+    public Transform createParent_portrait;
+    public Transform createParent_landscape;
+    public InGame_BaseNumber baseNumber_portrait;
+    public InGame_BaseNumber baseNumber_landscape;
 
     private Question currentQuestion;   // 현재 문제
-    private NumberItem[,] itemList;     // 생성한 메인 패널의 아이템들 (인덱스는 좌표)
+    private NumberItem[,] itemList_portrait;     // 생성한 메인 패널의 아이템들 (인덱스는 좌표)
+    private NumberItem[,] itemList_landscape;     // 생성한 메인 패널의 아이템들 (인덱스는 좌표)
     private System.Numerics.Vector2 selectedPosition;   // 현재 선택된 셀의 좌표
 
     /// <summary>
@@ -29,14 +31,18 @@ public class MatrixControl : MonoBehaviour
         currentQuestion = qData;
 
         #region 메인 패널 생성
-        itemList = new NumberItem[qData.length, qData.length];
+        itemList_portrait = new NumberItem[qData.length, qData.length];
+        itemList_landscape = new NumberItem[qData.length, qData.length];
 
         for (int i = 0; i < qData.length; i++)
         {
             for (int j = 0; j < qData.length; j++)
             {
                 GameObject _instance = GameObject.Instantiate(prefabNumberItem, createParent_portrait) as GameObject;
+                GameObject _instance2 = GameObject.Instantiate(prefabNumberItem, createParent_landscape) as GameObject;
+
                 NumberItem _item = _instance.GetComponent<NumberItem>();
+                NumberItem _item2 = _instance2.GetComponent<NumberItem>();
 
                 int _number = qData.q[i, j];
 
@@ -48,8 +54,16 @@ public class MatrixControl : MonoBehaviour
                 bool _isBottom = i == 2 || i == 5 || i == qData.length - 1;
 
                 // area넘버
+                //┌───┬───┬───┐
+                //│  1  │  2  │  3  │
+                //├───┼───┼───┤
+                //│  4  │  5  │  6  │
+                //├───┼───┼───┤
+                //│  7  │  8  │  9  │
+                //└───┴───┴───┘
                 // 이거 구하는 수학적 공식이 있을것 같은데...
                 // 이리저리 짱돌 굴려봤는데 안나와서 하드코딩 -_-
+
                 int areaNumber = 0;
                 if ((-1 < i && i < 3) && (-1 < j && j < 3)) // i == 0~2 && j == 0~2 >> 1
                     areaNumber = 1;
@@ -73,13 +87,18 @@ public class MatrixControl : MonoBehaviour
                 _item.SetInit(_number, areaNumber, new System.Numerics.Vector2(i, j), _isLeft, _isRight, _isTop, _isBottom);
                 _item.onClickEvent += SelectMainItem;
 
-                itemList[i, j] = _item;
+                _item2.SetInit(_number, areaNumber, new System.Numerics.Vector2(i, j), _isLeft, _isRight, _isTop, _isBottom);
+                _item2.onClickEvent += SelectMainItem;
+
+                itemList_portrait[i, j] = _item;
+                itemList_landscape[i, j] = _item2;
             }
         }
         #endregion
 
         #region 하단 숫자 관리패널 생성 및 이벤트 연결
         baseNumber_portrait.CreateItem(SelectBaseItem);
+        baseNumber_landscape.CreateItem(SelectBaseItem);
         #endregion
     }
 
@@ -96,8 +115,8 @@ public class MatrixControl : MonoBehaviour
         int _y = (int)selectedPosition.Y;
 
         // 선택된 셀의 아이템 객체 얻기
-        NumberItem selectedItem = itemList[_x, _y];
-        
+        NumberItem selectedItem = itemList_portrait[_x, _y];
+
         // 선택된 Area 번호.
         int selectedArea = selectedItem.GetAreaNumber;
 
@@ -113,13 +132,12 @@ public class MatrixControl : MonoBehaviour
             {
                 MAIN_CELL_STATE _state = MAIN_CELL_STATE.INVALID;
 
-                int targetAreaNumber = itemList[i, j].GetAreaNumber;
-                int targetNumber = itemList[i, j].GetNumber;
-
-                // Debug.Log(string.Format("x:{0}, y:{1}, selectedNumber:{2}, selectedArea:{3}, targetAreaNumber:{4}, targetNumber:{5}", i,j, selectedNumber, selectedArea, targetAreaNumber, targetNumber));
-
-                // 우선권
-                // 선택된 셀 > 선택된 동일한 숫자 > 같은 행 또는 열 또는 동일 area > 흰색처리
+                // 가로 또는 세로 일때의 데이터가 동일하므로 하나로 계산해서 동시처리한다.
+                int targetAreaNumber = itemList_portrait[i, j].GetAreaNumber;
+                int targetNumber = itemList_portrait[i, j].GetNumber;
+                                
+                // 선택된 셀과 영향있는 셀의 컬러 처리.
+                // 우선권은 선택된 셀 > 선택된 동일한 숫자 > 같은 행 또는 열 또는 동일 area > 흰색처리
                 if (i == _x && j == _y)
                     _state = MAIN_CELL_STATE.SELECTED;
                 else if (selectedNumber > 0 && selectedNumber == targetNumber)
@@ -127,7 +145,8 @@ public class MatrixControl : MonoBehaviour
                 else if (i == _x || j == _y || targetAreaNumber == selectedArea)
                     _state = MAIN_CELL_STATE.ALIGNMENT;
 
-                itemList[i, j].SetState(_state);
+                itemList_portrait[i, j].SetState(_state);
+                itemList_landscape[i, j].SetState(_state);
             }
         }
     }
@@ -139,12 +158,14 @@ public class MatrixControl : MonoBehaviour
     private void SelectBaseItem(int value)
     {
         // 현재 선택된 좌표 얻기
-        int _x = (int)selectedPosition.X;
-        int _y = (int)selectedPosition.Y;
+        short _x = (short)selectedPosition.X;
+        short _y = (short)selectedPosition.Y;
 
         // 선택된 셀의 아이템 객체 얻기
-        NumberItem selectedItem = itemList[_x, _y];
+        NumberItem selectedItem = itemList_portrait[_x, _y];
+        NumberItem selectedItem2 = itemList_landscape[_x, _y];
 
-        selectedItem.SetData(value);
+        selectedItem.SetData(value, currentQuestion.CheckAnswer(_x, _y, value));
+        selectedItem2.SetData(value, currentQuestion.CheckAnswer(_x, _y, value));
     }
 }

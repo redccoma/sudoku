@@ -87,8 +87,9 @@ public class NumberItem : MonoBehaviour
     /// <summary>
     /// 셀 숫자 수정
     /// </summary>
-    /// <param name="number">반영할 숫자 (0 또는 음수인 경우 값 초기화)</param>    
-    public void SetData(int number)
+    /// <param name="number">반영할 숫자 (0 또는 음수인 경우 값 초기화)</param>
+    /// <param name="isMatched">정답과 맞는가?</param>
+    public void SetData(int number, bool isMatched)
     {
         if (number > 0)
         {
@@ -100,6 +101,11 @@ public class NumberItem : MonoBehaviour
             myNumber = 0;
             mText.text = string.Empty;
         }
+
+        if (isMatched)
+            mText.color = Color.black;
+        else
+            mText.color = Color.red;
     }
 
     /// <summary>
