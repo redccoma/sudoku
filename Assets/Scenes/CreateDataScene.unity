@@ -803,9 +803,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "\uBB38\uC81C\uB85C \uB0BC \uC22B\uC790\uB294 \uCCB4\uD06C\uBC15\uC2A4\uC5D0
-    \uCCB4\uD06C\uD558\uC138\uC694. (\uBB38\uC81C\uB294 \uBE68\uAC15\uC0C9\uC73C\uB85C
-    \uD45C\uC2DC\uB429\uB2C8\uB2E4)"
+  m_Text: "\uC720\uC800 \uBB38\uC81C\uD480\uC774\uC2DC \uD654\uBA74\uC5D0 \uD45C\uC2DC\uD560
+    \uC22B\uC790\uB97C \uCCB4\uD06C\uD558\uC138\uC694. (\uBD89\uC740\uC0C9 \uD3F0\uD2B8
+    \uCC98\uB9AC\uB428)"
 --- !u!222 &725866694
 CanvasRenderer:
   m_ObjectHideFlags: 0
