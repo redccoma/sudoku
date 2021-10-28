@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +12,8 @@ public class NumberItem : MonoBehaviour
 {
     public Text mText;
     public Image selectedColor;
+    
+    public GameObject[] memoNumbers;
 
     public GameObject leftLine;
     public GameObject rightLine;
@@ -21,7 +25,8 @@ public class NumberItem : MonoBehaviour
     private int myNumber;   // 현재 숫자
     private int myArea;     // 에어리어 (사각 영역 넘버링)
     private System.Numerics.Vector2 myPosition; // 내 좌표
-    private bool isEmptyCell = false;
+    private bool isEmptyCell = false;   // 유저입력 가능 필드 구분 플래그.
+    private List<int> memoNumberList = new List<int>(); // 메모된 숫자들.
 
     /// <summary>
     /// 유저가 입력 가능한 필드인가.
@@ -82,6 +87,11 @@ public class NumberItem : MonoBehaviour
         rightLine.SetActive(isRight);
         topLine.SetActive(isTop);
         bottomLine.SetActive(isBottom);
+
+        for (int i = 0; i < memoNumbers.Length; i++)
+            memoNumbers[i].SetActive(false);
+
+        memoNumberList.Clear();
     }
 
     /// <summary>
@@ -94,7 +104,12 @@ public class NumberItem : MonoBehaviour
     {
         if (!IsEmptyCell)
             return false;
-        
+
+        // 셀의 숫자를 입력 혹은 지우기하는 모든 경우에는 메모를 삭제한다.
+        memoNumberList.Clear();
+        for (int i = 0; i < memoNumbers.Length; i++)
+            memoNumbers[i].SetActive(false);
+
         if (number > 0)
         {
             myNumber = number;
@@ -113,6 +128,28 @@ public class NumberItem : MonoBehaviour
             mText.color = Color.red;
 
         return true;
+    }
+
+    /// <summary>
+    /// 메모 표시 (on/off)
+    /// </summary>
+    /// <param name="number">메모처리할 숫자(1~9)</param>
+    public void SetMemo(int number)
+    {
+        // 로직상 숫자가 입력된 상태에서 메모
+        if(string.IsNullOrEmpty(mText.text))
+        {
+            if (0 < number && number < 10)
+            {
+                if (memoNumberList.Contains(number))
+                    memoNumberList.Remove(number);
+                else
+                    memoNumberList.Add(number);
+
+                for (int i = 0; i < memoNumbers.Length; i++)
+                    memoNumbers[i].SetActive(memoNumberList.Contains(i + 1));
+            }
+        }
     }
 
     /// <summary>

@@ -16,11 +16,15 @@ public class MatrixControl : MonoBehaviour
     public Transform createParent_landscape;
     public InGame_BaseNumber baseNumber_portrait;
     public InGame_BaseNumber baseNumber_landscape;
+    public Toggle memoToggle_portrait;
+    public Toggle memoToggle_landscape;
 
     private Question currentQuestion;   // 현재 문제
     private NumberItem[,] itemList_portrait;     // 생성한 메인 패널의 아이템들 (인덱스는 좌표)
     private NumberItem[,] itemList_landscape;     // 생성한 메인 패널의 아이템들 (인덱스는 좌표)
     private System.Numerics.Vector2 selectedPosition;   // 현재 선택된 셀의 좌표
+
+    private bool isMemoMode = false;
 
     /// <summary>
     /// 기본판넬에 NumberItem 프리팹 생성
@@ -29,7 +33,7 @@ public class MatrixControl : MonoBehaviour
     public void CreateMatrix(Question qData)
     {
         currentQuestion = qData;
-
+        
         #region 메인 패널 생성
         itemList_portrait = new NumberItem[qData.length, qData.length];
         itemList_landscape = new NumberItem[qData.length, qData.length];
@@ -99,6 +103,12 @@ public class MatrixControl : MonoBehaviour
         #region 하단 숫자 관리패널 생성 및 이벤트 연결
         baseNumber_portrait.CreateItem(SelectBaseItem);
         baseNumber_landscape.CreateItem(SelectBaseItem);
+        #endregion
+
+        #region 메모 토글 처리
+        // TODO
+        // 스크린의 방향에 따라 실시간으로 값변경 이벤트 콜백을 바꿔줘야 한다.
+        // isOn 으로 스크립트에 강제 설정할때 changedValue 콜백이 떨어지는것을 유의.
         #endregion
     }
 
@@ -184,5 +194,26 @@ public class MatrixControl : MonoBehaviour
 
         selectedItem.SetData(0);
         selectedItem2.SetData(0);
+    }
+
+    /// <summary>
+    /// 메모버튼 토글시.
+    /// </summary>
+    public void OnClick_MemoToggle(bool isOn)
+    {
+        if (ScreenControl.GetScreenOrientation == SCREEN_ORIENTATION_TYPE.Portrait)
+        {
+            isMemoMode = memoToggle_portrait.isOn;
+            memoToggle_landscape.isOn = isMemoMode;
+        }
+        else if (ScreenControl.GetScreenOrientation == SCREEN_ORIENTATION_TYPE.Landscape)
+        {
+            isMemoMode = memoToggle_landscape.isOn;
+            memoToggle_portrait.isOn = isMemoMode;
+        }
+
+        Debug.Log(isMemoMode);
+
+
     }
 }
