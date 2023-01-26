@@ -1,5 +1,5 @@
 # ProjectA
-SUDOKU 게임.
+기본적인 SUDOKU 게임
 
-# Unity 버젼
-* 2021.1.21f1 * 
+# requirement
+- Unity 2021.1.21f1
